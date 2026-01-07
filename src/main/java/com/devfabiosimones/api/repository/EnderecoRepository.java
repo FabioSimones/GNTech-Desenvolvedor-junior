@@ -10,9 +10,9 @@ import java.util.List;
 public interface EnderecoRepository extends JpaRepository<Endereco, Long> {
 
     @Query(nativeQuery = true, value = """
-				SELECT tb_endereco.cep AS cep
-                FROM tb_endereco
-				WHERE tb_endereco.cep = :cep
+				SELECT enderecos.cep AS cep
+                FROM enderecos
+				WHERE enderecos.cep = :cep
 			""")
     List<EnderecoDetailsProjection> buscaCepNoBanco(String cep);
 }

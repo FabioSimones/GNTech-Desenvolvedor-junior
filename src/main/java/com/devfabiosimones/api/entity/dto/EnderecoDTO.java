@@ -1,12 +1,13 @@
 package com.devfabiosimones.api.entity.dto;
 
 import com.devfabiosimones.api.entity.Endereco;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class EnderecoDTO {
 
     private String cep;
