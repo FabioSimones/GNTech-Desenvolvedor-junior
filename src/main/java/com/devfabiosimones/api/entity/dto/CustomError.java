@@ -1,10 +1,14 @@
 package com.devfabiosimones.api.entity.dto;
 
-import lombok.Data;
+import lombok.*;
 
 import java.time.Instant;
 
 @Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class CustomError {
 
     private Instant timestamp;
