@@ -1,6 +1,7 @@
 package com.devfabiosimones.api.controller.handlers;
 
 import com.devfabiosimones.api.entity.dto.CustomError;
+import com.devfabiosimones.api.service.exceptions.NotFoundException;
 import com.devfabiosimones.api.service.exceptions.ResourceAlreadyExistsException;
 import com.devfabiosimones.api.service.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,6 +15,13 @@ import java.time.Instant;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<CustomError> notFoundException(NotFoundException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        CustomError err = new CustomError(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<CustomError> resourceNotFoundException(ResourceNotFoundException e, HttpServletRequest request) {

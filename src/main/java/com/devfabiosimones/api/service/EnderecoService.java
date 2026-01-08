@@ -5,11 +5,11 @@ import com.devfabiosimones.api.entity.Endereco;
 import com.devfabiosimones.api.entity.dto.EnderecoDTO;
 import com.devfabiosimones.api.projections.EnderecoDetailsProjection;
 import com.devfabiosimones.api.repository.EnderecoRepository;
+import com.devfabiosimones.api.service.exceptions.NotFoundException;
 import com.devfabiosimones.api.service.exceptions.ResourceAlreadyExistsException;
 import com.devfabiosimones.api.service.exceptions.ResourceNotFoundException;
+import feign.FeignException;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,11 +46,19 @@ public class EnderecoService {
     }
 
     private EnderecoDTO consultaCepExterno(String cep) {
-        EnderecoDTO dto = viaCepConfig.consultarCep(cep);
-        if (dto == null || dto.getCep() == null) {
-            throw new ResourceNotFoundException("CEP inválido ou não encontrado: " + cep);
+        try {
+            if (cep == null || cep.isBlank()) {
+                throw new NotFoundException("CEP inválido ou não informado");
+            }
+            return viaCepConfig.consultarCep(cep);
+
+        } catch (FeignException e) {
+            if (e.status() == 400 || e.status() == 404) {
+                throw new ResourceNotFoundException("CEP inválido ou não encontrado: " + cep);
+            }
+
+            throw new RuntimeException("Erro ao consultar ViaCEP: " + e.getMessage(), e);
         }
-        return dto;
     }
 
     private void buscaCepBanco(String cep) {

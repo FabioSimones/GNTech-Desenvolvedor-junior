@@ -24,7 +24,5 @@ public class EnderecoDTO {
         localidade = entity.getLocalidade();
         uf = entity.getUf();
         ddd = entity.getDdd();
-
-
     }
 }
